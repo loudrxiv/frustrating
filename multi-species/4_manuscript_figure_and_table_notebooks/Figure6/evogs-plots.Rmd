@@ -1,0 +1,105 @@
+---
+Title: "Evoution plots"
+output: html_document
+---
+
+```{r, load libraries}
+
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(ggbeeswarm)
+library(ggforce)
+library(ggpubr)
+library(ggtext) #For styling the text
+
+```
+```{r set paths}
+
+# Declare transciption factors (we want to make quicker prototype sets too)
+TFs         <- c("CEBPA", "HNF4A", "HNF6", "FOXA1")
+
+# Set the root directory
+ROOT        <- file.path(getwd())
+ROOT_PLOTS  <- file.path(ROOT, "plots", "Figure6")
+SAVE        <- TRUE
+
+```
+# Load CSVs (saved)
+```{r load csvs}
+
+evo_metrics     <- read.csv(file.path(ROOT_PLOTS, "evo-group-species_performance.csv"))
+
+# Replace the holdout names
+df <- evo_metrics
+df$Holdouts[df$Holdouts == "0"] <- "rheMac10,mm10,rn7,canFam6"
+df$Holdouts[df$Holdouts == "1"] <- "mm10,rn7,canFam6"
+df$Holdouts[df$Holdouts == "2"] <- "rn7,canFam6"
+df$Holdouts[df$Holdouts == "3"] <- "canFam6"
+
+# Reorganize
+df$Holdouts                     <- factor(df$Holdouts, levels = c(
+    "rheMac10,mm10,rn7,canFam6",
+    "mm10,rn7,canFam6",
+    "rn7,canFam6",
+    "canFam6"
+))
+
+```
+```{r}
+
+# Calculate the difference from the base performance (Holdout 0)
+df_base <- df |>
+  filter(Holdouts == "rheMac10,mm10,rn7,canFam6") |>
+  select(TF, auPRC_base = auPRC, auROC_base = auROC)
+
+df <- df |>
+    left_join(df_base, by = "TF") |>
+    mutate(auPRC_diff = auPRC - auPRC_base,
+            auROC_diff = auROC - auROC_base) |>
+    select(TF, Holdouts, auPRC, auROC, auPRC_diff, auROC_diff)
+
+df_diff <- df %>%
+  arrange(TF, Holdouts) %>%
+  group_by(TF) %>%
+  mutate(
+    incremental_auPRC_diff = case_when(
+      Holdouts == "mm10,rn7,canFam6" ~ auPRC_diff,
+      Holdouts %in% c("mm10,rn7,canFam6", "canFam6") ~ auPRC_diff - lag(auPRC_diff, default = 0),
+      TRUE ~ 0
+    )
+  ) %>%
+  ungroup()
+
+```
+# Create the plot
+```{r}
+
+auPRC_plot <- ggplot(df, aes(x = factor(Holdouts), y = auPRC_diff)) +
+    geom_bar(position="dodge", stat="identity", fill = "steelblue") +
+    xlab(NULL) +
+    labs(colour = "Holdouts") +
+    ylab("Change in auPRC based on holdout species") +
+    facet_wrap(~ TF, scales = "free_y", nrow=1, ncol=4) +
+    theme(
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 8, face = "plain"),
+        axis.text.y = element_text(hjust = 1, size = 16, face = "plain"),
+        axis.title.y = element_text(size = 18, face = "plain"),
+        panel.spacing.x = unit(1, "lines"),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1.5),
+        strip.text = element_text(face = "bold", size = 12),
+        legend.position = "none"
+    )
+
+if (SAVE) {
+    ggsave(
+        filename=file.path(ROOT_PLOTS, "EvoGS.pdf"),
+        plot=auPRC_plot,
+        device="pdf",
+        dpi=600
+    )
+} else {
+    auPRC_plot
+}
+
+```

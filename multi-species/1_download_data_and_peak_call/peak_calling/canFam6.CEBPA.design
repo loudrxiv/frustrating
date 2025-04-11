@@ -1,0 +1,9 @@
+/net/talisker/home/benos/mae117/Documents/research/dennis/domain_adaptation/RECOMB/multi-species/chip_seq_data/do79_CEBPA_liver_sc9314_cfa3_CRI01.fq.final.bam	signal	BAM	CEBPA	REP1
+/net/talisker/home/benos/mae117/Documents/research/dennis/domain_adaptation/RECOMB/multi-species/chip_seq_data/do79_CEBPA_liver_sc9314_cfa3_CRI02.fq.final.bam	signal	BAM	CEBPA	REP1
+/net/talisker/home/benos/mae117/Documents/research/dennis/domain_adaptation/RECOMB/multi-species/chip_seq_data/do79_CEBPA_liver_sc9314_cfa3_CRI03.fq.final.bam	signal	BAM	CEBPA	REP1
+/net/talisker/home/benos/mae117/Documents/research/dennis/domain_adaptation/RECOMB/multi-species/chip_seq_data/do61_CEBPA_liver_sc9314_cfa4_CRI01.fq.final.bam	signal	BAM	CEBPA	REP2
+/net/talisker/home/benos/mae117/Documents/research/dennis/domain_adaptation/RECOMB/multi-species/chip_seq_data/do61_CEBPA_liver_sc9314_cfa4_CRI02.fq.final.bam	signal	BAM	CEBPA	REP2
+/net/talisker/home/benos/mae117/Documents/research/dennis/domain_adaptation/RECOMB/multi-species/chip_seq_data/do61_CEBPA_liver_sc9314_cfa4_CRI03.fq.final.bam	signal	BAM	CEBPA	REP2
+/net/talisker/home/benos/mae117/Documents/research/dennis/domain_adaptation/RECOMB/multi-species/chip_seq_data/do261_Input_liver_none_cfa3_CRI01.fq.final.bam	control	BAM	Input	REP1
+/net/talisker/home/benos/mae117/Documents/research/dennis/domain_adaptation/RECOMB/multi-species/chip_seq_data/do100_Input_liver_none_cfa4_CRI01.fq.final.bam	control	BAM	Input	REP2
+/net/talisker/home/benos/mae117/Documents/research/dennis/domain_adaptation/RECOMB/multi-species/chip_seq_data/do107_Input_liver_none_cfa4_CRI01.fq.final.bam	control	BAM	Input	REP2

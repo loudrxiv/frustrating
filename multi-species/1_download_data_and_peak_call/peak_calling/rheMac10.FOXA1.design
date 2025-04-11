@@ -1,0 +1,3 @@
+/net/talisker/home/benos/mae117/Documents/research/dennis/domain_adaptation/RECOMB/multi-species/chip_seq_data/do474_FoxA1_liver_ab5089_mmlBlues_CRI01.fq.final.bam	signal	BAM	FoxA1	REP1
+/net/talisker/home/benos/mae117/Documents/research/dennis/domain_adaptation/RECOMB/multi-species/chip_seq_data/do132_Input_liver_none_mmlBlues_CRI01.fq.final.bam	control	BAM	Input	REP1
+/net/talisker/home/benos/mae117/Documents/research/dennis/domain_adaptation/RECOMB/multi-species/chip_seq_data/do133_Input_liver_none_mmlBlues_CRI01.fq.final.bam	control	BAM	Input	REP1

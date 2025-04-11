@@ -54,6 +54,7 @@ multi-species/plots/
 multi-species/chip_seq_data/
 multi-species/model_out/
 multi-species/models/
+multi-species/embeddings/
 
 multi-species/3_train_and_test_models/__pycache__/
 multi-species/3_train_and_test_models/BaselineAux/

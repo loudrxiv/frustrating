@@ -1,0 +1,12 @@
+Fri Apr  4 01:19:52 PM EDT 2025
+g022
+uid=8054(mae117) gid=607(benos) groups=607(benos),614(mscbio)
+========================
+TF: HNF4A
+Target: mm10
+Lambda: 3.0
+Match Mean: 0
+
+activating conda environment
+/net/talisker/home/benos/mae117/.conda/envs/genomic_tools/bin/python
+running script

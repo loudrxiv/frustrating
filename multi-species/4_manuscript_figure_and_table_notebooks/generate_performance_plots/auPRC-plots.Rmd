@@ -1,0 +1,239 @@
+---
+Title: "auPRC performance plots"
+output: html_document
+---
+
+```{r, load libraries}
+
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(ggbeeswarm)
+library(ggforce)
+library(ggpubr)
+
+```
+```{r set paths}
+
+# Declare transciption factors (we want to make quicker prototype sets too)
+TFs         <- c("CEBPA", "HNF4A", "HNF6", "FOXA1")
+
+# Set the root directory
+ROOT        <- getwd()
+ROOT_PLOTS  <- file.path(ROOT, "plots", "Supplement5")
+SAVE        <- TRUE
+
+```
+# Load CSVs (saved)
+```{r load csvs}
+
+performance_metrics     <- read.csv(file.path(ROOT_PLOTS, "performance_data.csv"))
+
+# Subset each target
+mouse_target_metrics    <- performance_metrics[performance_metrics$Target == "mm10",]
+rat_target_metrics      <- performance_metrics[performance_metrics$Target == "rn7",]
+dog_target_metrics      <- performance_metrics[performance_metrics$Target == "canFam6",]
+monkey_target_metrics   <- performance_metrics[performance_metrics$Target == "rheMac10",]
+
+```
+# Create baseline figure, with lower and upper bounds
+## Target=mouse
+```{r curate for plot}
+
+# Remove the intra-species performance for the domain-adaptive models!
+df <- mouse_target_metrics
+df$Model[df$Model == "Baseline"]    <- "Target"
+df$Model[df$Model == "BM"]          <- "Multi-species"
+df$Model[df$Model == "MORALE"]      <- "MORALE"
+
+df$Model                            <- factor(df$Model, levels = c("Target", "Multi-species", "MORALE"))
+
+```
+```{r plot... the plot}
+
+mouse_target_plot <- ggplot(data = df, aes(x = Model, y = auPRC, color = Model, fill=Model)) +
+    geom_bar(position="dodge", stat="identity") +
+    xlab(NULL) +
+    labs(
+        title = "Target=mouse",
+        colour = "Model"
+    ) +
+    ylab("Area Under PRC") +
+    geom_hline(
+        data = df |> group_by(TF, Model) |> summarise(mean_auPRC = mean(auPRC)) |> filter(Model == "Target"),
+        aes(yintercept = mean_auPRC),
+        linetype = 2
+    ) +
+    facet_wrap(~ TF, scales = "free_y", nrow=1, ncol=4) +
+    theme(
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 14, face = "plain"),
+        axis.text.y = element_text(hjust = 1, size = 16, face = "plain"),
+        axis.title.y = element_text(size = 18, face = "plain"),
+        panel.spacing.x = unit(1, "lines"),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1.5),
+        strip.text = element_text(face = "bold", size = 12),
+        legend.position = "none"
+    ) # + stat_compare_means(method = "t.test", paired = T, comparisons = my_comparisons)
+
+if (SAVE) {
+    ggsave(
+        filename=file.path(ROOT_PLOTS, "mouse_auPRC_multispecies.pdf"),
+        plot=mouse_target_plot,
+        device="pdf",
+        dpi=600
+    )
+} else {
+    mouse_target_plot
+}
+
+```
+## Target=rat
+```{r curate for plot}
+
+# Remove the intra-species performance for the domain-adaptive models!
+df <- rat_target_metrics
+df$Model[df$Model == "Baseline"]    <- "Target"
+df$Model[df$Model == "BM"]          <- "Multi-species"
+df$Model[df$Model == "MORALE"]      <- "MORALE"
+
+df$Model                            <- factor(df$Model, levels = c("Target", "Multi-species", "MORALE"))
+
+```
+```{r plot... the plot}
+
+rat_target_plot <- ggplot(data = df, aes(x = Model, y = auPRC, color = Model, fill=Model)) +
+    geom_bar(position="dodge", stat="identity") +
+    xlab(NULL) +
+    labs(
+        title = "Target=rat",
+        colour = "Model"
+    ) +
+    ylab("Area Under PRC") +
+    geom_hline(
+        data = df |> group_by(TF, Model) |> summarise(mean_auPRC = mean(auPRC)) |> filter(Model == "Target"),
+        aes(yintercept = mean_auPRC),
+        linetype = 2
+    ) +
+    facet_wrap(~ TF, scales = "free_y", nrow=1, ncol=4) +
+    theme(
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 14, face = "plain"),
+        axis.text.y = element_text(hjust = 1, size = 16, face = "plain"),
+        axis.title.y = element_text(size = 18, face = "plain"),
+        panel.spacing.x = unit(1, "lines"),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1.5),
+        strip.text = element_text(face = "bold", size = 12),
+        legend.position = "none"
+    )
+
+if (SAVE) {
+    ggsave(
+        filename=file.path(ROOT_PLOTS, "rat_auPRC_multispecies.pdf"),
+        plot=rat_target_plot,
+        device="pdf",
+        dpi=600
+    )
+} else {
+    rat_target_plot
+}
+
+```
+## Target=dog
+```{r curate for plot}
+
+# Remove the intra-species performance for the domain-adaptive models!
+df <- dog_target_metrics
+df$Model[df$Model == "Baseline"]    <- "Target"
+df$Model[df$Model == "BM"]          <- "Multi-species"
+df$Model[df$Model == "MORALE"]      <- "MORALE"
+
+df$Model                            <- factor(df$Model, levels = c("Target", "Multi-species", "MORALE"))
+
+```
+```{r plot... the plot}
+
+dog_target_plot <- ggplot(data = df, aes(x = Model, y = auPRC, color = Model, fill=Model)) +
+    geom_bar(position="dodge", stat="identity") +
+    xlab(NULL) +
+    labs(
+        title = "Target=dog",
+        colour = "Model"
+    ) +
+    ylab("Area Under PRC") +
+    geom_hline(
+        data = df |> group_by(TF, Model) |> summarise(mean_auPRC = mean(auPRC)) |> filter(Model == "Target"),
+        aes(yintercept = mean_auPRC),
+        linetype = 2
+    ) +
+    facet_wrap(~ TF, scales = "free_y", nrow=1, ncol=4) +
+    theme(
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 14, face = "plain"),
+        axis.text.y = element_text(hjust = 1, size = 16, face = "plain"),
+        axis.title.y = element_text(size = 18, face = "plain"),
+        panel.spacing.x = unit(1, "lines"),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1.5),
+        strip.text = element_text(face = "bold", size = 12),
+        legend.position = "none"
+    )
+
+if (SAVE) {
+    ggsave(
+        filename=file.path(ROOT_PLOTS, "dog_auPRC_multispecies.pdf"),
+        plot=dog_target_plot,
+        device="pdf",
+        dpi=600
+    )
+} else {
+    dog_target_plot
+}
+
+```
+## Target=monkey
+```{r curate for plot}
+
+# Remove the intra-species performance for the domain-adaptive models!
+df <- monkey_target_metrics
+df$Model[df$Model == "Baseline"]    <- "Target"
+df$Model[df$Model == "BM"]          <- "Multi-species"
+df$Model[df$Model == "MORALE"]      <- "MORALE"
+
+df$Model                            <- factor(df$Model, levels = c("Target", "Multi-species", "MORALE"))
+
+```
+```{r plot... the plot}
+
+monkey_target_plot <- ggplot(data = df, aes(x = Model, y = auPRC, color = Model, fill=Model)) +
+    geom_bar(position="dodge", stat="identity") +
+    xlab(NULL) +
+    labs(
+        title = "Target=monkey",
+        colour = "Model"
+    ) +
+    ylab("Area Under PRC") +
+    geom_hline(
+        data = df |> group_by(TF, Model) |> summarise(mean_auPRC = mean(auPRC)) |> filter(Model == "Target"),
+        aes(yintercept = mean_auPRC),
+        linetype = 2
+    ) +
+    facet_wrap(~ TF, scales = "free_y", nrow=1, ncol=4) +
+    theme(
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 14, face = "plain"),
+        axis.text.y = element_text(hjust = 1, size = 16, face = "plain"),
+        axis.title.y = element_text(size = 18, face = "plain"),
+        panel.spacing.x = unit(1, "lines"),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1.5),
+        strip.text = element_text(face = "bold", size = 12),
+        legend.position = "none"
+    )
+
+if (SAVE) {
+    ggsave(
+        filename=file.path(ROOT_PLOTS, "monkey_auPRC_multispecies.pdf"),
+        plot=monkey_target_plot,
+        device="pdf",
+        dpi=600
+    )
+} else {
+    monkey_target_plot
+}
+
+```

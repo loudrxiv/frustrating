@@ -1,0 +1,3 @@
+/net/talisker/home/benos/mae117/Documents/research/dennis/domain_adaptation/RECOMB/multi-species/chip_seq_data/do562_HNF4a_liver_ARP31046_mmuOON489_CRI01.fq.final.bam	signal	BAM	Hnf4a	REP1
+/net/talisker/home/benos/mae117/Documents/research/dennis/domain_adaptation/RECOMB/multi-species/chip_seq_data/do566_Input_liver_none_mmuOON489_CRI01.fq.final.bam	control	BAM	Input	REP1
+/net/talisker/home/benos/mae117/Documents/research/dennis/domain_adaptation/RECOMB/multi-species/chip_seq_data/do732_HNF4a_liver_ARP31946_mmu0h490+491_CRI01.fq.final.bam	signal	BAM	Hnf4a	REP2
