@@ -74,6 +74,7 @@ multi-species/3_train_and_test_models/BM/train/
 
 multi-species/3_train_and_test_models/GRL/
 
+multi-species/3_train_and_test_models/MORALE/__pycache__/
 multi-species/3_train_and_test_models/MORALE/tune/
 multi-species/3_train_and_test_models/MORALE/train/
 multi-species/3_train_and_test_models/MORALE/test/
@@ -87,6 +88,7 @@ multi-species/3_train_and_test_models/MORALE/Evolution/group_species/train/
 multi-species/3_train_and_test_models/MORALE/Evolution/group_species/test/
 
 multi-species/4_manuscript_figure_and_table_notebooks/Other/
+multi-species/4_manuscript_figure_and_table_notebooks/Fig_compare-cosine-similarity-between-embeddings/embedding/
 
 # Files
 multi-species/1_download_data_and_peak_call/*.err
