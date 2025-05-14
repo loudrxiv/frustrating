@@ -13,9 +13,8 @@ Afterwards we are ready to proceed, stepwise, to: (1) create the data, (2) run t
 This first step focuses on gathering files and pretty much 'tiling' the genome based on the window size we want to operate off of. We download the necessary files for hg38 and mm10, filter it out (in bash!) using the blacklist files and then tile the genomes into 500bp with 50bp offset.
 
 To run all steps needed, simply execute:
-
 ```
-./runall_preprocess_data.sh
+./0_runall_preprocess_data.sh
 ```
 
 However, BEFORE running the preprocessing steps, you must have data. Please refer to the supplementary material (ST7, I think) in the manusscript to find all avaialble accession IDs needed to download the raw data. The next step is to call peaks with an algorithm of your choosing. We follow the previous procedure in relying on [multiGPS](https://github.com/seqcode/multigps) in order to do this; the scripts can be found in the `peak_calling` folder. We mimic their nested folder structure to organize the BED files.
@@ -46,10 +45,9 @@ If you want to change this, you a different software, or whatever else: you **MU
 
 ### 1. Make training and testing data
 
-Here we do a couple things, we follow previous work in creating specialized data from 15 epochs of training, and holdout chromosomes 1 & 2 for validation and testing. We create a few more files for repeat annotation analyses where applicable. Simply run
-
+Here we do a couple things, we follow previous work in creating specialized data from 15 epochs of training, and holdout chromosomes 1 & 2 for validation and testing. We create a few more files for repeat annotation analyses where applicable. You have to change the hard-coded `ROOT` here too. Afterwards, simply run:
 ```
-./0_runall_setup_model_data.sh
+./1_runall_setup_model_data.sh
 ```
 
 ### 2. Tune, train, and test models
