@@ -1,0 +1,13 @@
+Sat Apr 19 06:26:30 PM EDT 2025
+g023
+uid=8054(mae117) gid=607(benos) groups=607(benos),614(mscbio)
+========================
+TF: HNF4A
+Target: rheMac10
+Lambda: 6.0
+Match Mean: 1
+Holdout Index: 0
+
+activating conda environment
+/net/talisker/home/benos/mae117/.conda/envs/pytorch/bin/python
+running script

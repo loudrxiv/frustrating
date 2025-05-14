@@ -1,0 +1,13 @@
+Thu Apr 17 02:04:04 AM EDT 2025
+g023
+uid=8054(mae117) gid=607(benos) groups=607(benos),614(mscbio)
+========================
+TF: CEBPA
+Target: canFam6
+Lambda: 7.0
+Match Mean: 0
+Holdout Index: 3
+
+activating conda environment
+/net/talisker/home/benos/mae117/.conda/envs/pytorch/bin/python
+running script

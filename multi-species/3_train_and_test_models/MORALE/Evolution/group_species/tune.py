@@ -16,7 +16,7 @@ from torch import Tensor
 from einops import rearrange
 from typing import Callable, List, Optional, Union
 from params import Params, ROOT
-from generators import TrainGenerator_MultiSpecies, ValGenerator_MultiSpecies, TestGenerator_MultiSpecies
+from generators import TrainGenerator_MultiSpecies, ValGenerator_SingleSpecies, TestGenerator_SingleSpecies
 from sklearn.metrics import average_precision_score, roc_auc_score, confusion_matrix, log_loss
 from math import floor
 
@@ -55,33 +55,26 @@ def print_confusion_matrix(y, probs, threshold = 0.5):
 	# recall = TP / (TP + FN)
 	print("Recall at t = 0.5:\t", conf_matrix[1][1] / (conf_matrix[1][1] + conf_matrix[1][0]), "\n")
 
-def print_val_metrics(target_species, val_results):
-	
-    for species, path in val_results.items():
+def print_val_metrics(params, val_results):
 
-        print(f"\n==== {species} validation ====")
-        labels = np.array(val_results[species]['labels'])
-        probs = np.array(val_results[species]['probs'])
+	print(f"\n==== Target ({params.target_species}) Validation ====")
+	labels = np.array(val_results['labels'])
+	probs = np.array(val_results['probs'])
+	probs = probs.squeeze()
 
-        probs = probs.squeeze()
+	assert labels.shape == probs.shape, (labels.shape, probs.shape)
 
-        assert labels.shape == probs.shape, (labels.shape, probs.shape)
+	print("AUC:\t", roc_auc_score(labels, probs))
 
-        print("AUC:\t", roc_auc_score(labels, probs))
+	auPRC = average_precision_score(labels, probs)
+	print("auPRC:\t", auPRC)
 
-        auPRC = average_precision_score(labels, probs)
-        print("auPRC:\t", auPRC)
-        
-        loss = log_loss(labels, probs)  # this is binary cross-entropy
-        print("Loss:\t", loss)
-        
-        print_confusion_matrix(labels, probs)
+	loss = log_loss(labels, probs)  # this is binary cross-entropy
+	print("Loss:\t", loss)
 
-        # We need to save the auPRC from the target species
-        if species == target_species:
-            target_auPRC = auPRC
+	print_confusion_matrix(labels, probs)
 
-    return target_auPRC
+	return auPRC
 
 def moment_alignment(Xs, Xt, _match_mean=False, _lambda=1.0):
     """
@@ -164,14 +157,9 @@ def train_collate(batch):
     }
 
 def val_collate(batch):
-    data = {
-        species: torch.cat([dict_item['sequence'][species] for dict_item in batch]).float() for species in batch[0]['sequence'].keys()
-    }
-
-    label = {
-        species: torch.from_numpy(np.array([dict_item['label'][species] for dict_item in batch])).flatten().int() for species in batch[0]['sequence'].keys()
-    }
-
+    data    = torch.cat([dict_item['sequence'] for dict_item in batch]).float()
+    label   = torch.stack([dict_item['label'] for dict_item in batch]).int()
+    
     return {
         "sequence": data,
         "label": label
@@ -448,12 +436,14 @@ class Classifier(nn.Module):
     def forward(self, x):
         x = torch.nn.functional.sigmoid(self.head(x))
         return x
-
+    
 #===============================================================================
 
 if __name__ == "__main__":
 
-    seed        = 1182024
+    SAVE = False
+
+    seed = 1182024
 
     torch.manual_seed(seed)
     
@@ -467,7 +457,7 @@ if __name__ == "__main__":
 
     #--- (1) Set up parameters and dataloders
 
-    train_file, tf, target, _lambda, match_mean, num_holdout = sys.argv
+    tune_file, tf, target, _lambda, match_mean, num_holdout = sys.argv
 
     # Convert hyperparameters to appropriate types
     _lambda     = float(_lambda)
@@ -507,21 +497,29 @@ if __name__ == "__main__":
         collate_fn=train_collate
     )
 
-    vg_ms				= ValGenerator_MultiSpecies(params=params, percent_to_batch=0.05)
+    vg_ss				= ValGenerator_SingleSpecies(params=params, percent_to_batch=0.50)
     validation_loader	= DataLoader(
-        dataset=vg_ms,
+        dataset=vg_ss,
         batch_size=10000,
         pin_memory=True,
         collate_fn=val_collate
     )
-
+    
 	#---  (2) Define model and the optimizer
 
+    # Instantiate the models
     feature_extractor = FeatureExtractor(params)
     feature_extractor = feature_extractor.to(device)
+    feature_params = sum(p.numel() for p in feature_extractor.parameters())
+    print(f"Feature Extractor Architecture:\n{feature_extractor}\n")
 
     classifier = Classifier(params)
     classifier = classifier.to(device)
+    classifier_params = sum(p.numel() for p in classifier.parameters())
+    print(f"Classifier Architecture:\n{classifier}\n")
+
+    total_params = feature_params + classifier_params
+    print(f"Total number of parameters: {total_params}")
 
     optimizer = optim.Adam(
         (
@@ -531,30 +529,19 @@ if __name__ == "__main__":
         lr=1e-3
     )
 
-    print(f"Feature Extractor Architecture:\n{feature_extractor}\n")
-
-    print(f"Classifier Architecture:\n{classifier}\n")
-
-    feature_params = sum(p.numel() for p in feature_extractor.parameters())
-    classifier_params = sum(p.numel() for p in classifier.parameters())
-    total_params = feature_params + classifier_params
-    print(f"Total number of parameters: {total_params}")
-
     #--- (3) Train loop
 
-    #--- (3) Train loop
+    patience                = 2             # Number of epochs to wait for improvement before stopping
+    epochs_no_improve       = 0             # Counter for epochs without improvement
+    early_stop_triggered    = False         # Flag to indicate if early stopping happened
+    auprcs                  = []
+    num_epochs              = params.epochs # 15
 
-    auprcs      = []
-    num_epochs  = 5 # shorter for tuning
-    seed        = 1182024
-
-    torch.manual_seed(seed)
-
-    np.random.seed(seed)
+    print(f"Starting training for {num_epochs} epochs with early stopping patience={patience}")
 
     for epoch in range(0, num_epochs):
 
-        print(f"\nEpoch: {epoch}\n")
+        print(f"\n--- Training (on epoch {epoch}) ---\n")
 
         # Turn on training mode
         feature_extractor.train()
@@ -567,7 +554,7 @@ if __name__ == "__main__":
         # Lets keep track with tqdm
         train_bar  = tqdm(enumerate(train_loader), total=len(train_loader))
         val_bar    = tqdm(enumerate(validation_loader), total=len(validation_loader))
-        
+
         for batch_idx, data in train_bar:
 
             # (1) Process data
@@ -617,8 +604,8 @@ if __name__ == "__main__":
                     loss_morale += moment_alignment(
                         Xs=source_features.squeeze(),
                         Xt=target_features.squeeze(),
-                        _match_mean=match_mean,
-                        _lambda=_lambda
+                        _match_mean=False,
+                        _lambda=1.0
                     )
 
             # Get the predictions on the source domain
@@ -638,6 +625,8 @@ if __name__ == "__main__":
                 print(f"Step: {batch_idx} BCE Loss: {loss_pred.item()}, MORALE Loss:  {loss_morale.item()}, Total loss: {loss.item()}")
 
         #--- Validation
+
+        print(f"\n--- Validation (on epoch {epoch}) ---\n")
         
         with torch.no_grad():
 
@@ -646,21 +635,37 @@ if __name__ == "__main__":
             classifier.eval()
 
             # A list to store all the probabilities
-            val_results = {species: {"probs": [], "labels":[]} for species, path in vg_ms.valfiles.items()}
+            val_results = {"probs": [], "labels":[]}
 
             for batch_idx, data in val_bar:
-                for species, path in vg_ms.valfiles.items():
-                    curr_data = torch.tensor(data['sequence'][species], dtype=torch.float32).to(device)
+                curr_data = torch.tensor(data['sequence'], dtype=torch.float32).to(device)
+                val_results['probs'].extend(classifier(feature_extractor(curr_data)).detach().cpu().numpy().tolist())
+                val_results['labels'].extend(data['label'].detach().cpu().numpy().tolist())
 
-                    val_results[species]['probs'].extend(classifier(feature_extractor(curr_data)).cpu().numpy().tolist())
-                    val_results[species]['labels'].extend(data['label'][species].cpu().numpy().tolist())
-
-            target_auprc = print_val_metrics(params.target_species, val_results)
-
-            current_auprcs = auprcs
+            target_auprc    = print_val_metrics(params, val_results)
+            current_auprcs  = auprcs
 
             if len(current_auprcs) == 0 or target_auprc > max(current_auprcs):
-                print("Best model so far! (target species) validation auPRC = ", target_auprc)
+                print("Best model so far! (target species) validation auPRC = ", target_auprc)            
+                epochs_no_improve = 0
+            else:
+                epochs_no_improve += 1
+                print(f"Validation AUPRC did not improve for {epochs_no_improve} epoch(s). Best: {max(current_auprcs):.4f}")
+
+            # Check for early stopping
+            if epochs_no_improve >= patience:
+                print(f"\nEarly stopping triggered after {epoch} epochs!")
+                early_stop_triggered = True
+                break # Exit the main training loop
 
             current_auprcs.append(target_auprc)
             auprcs = current_auprcs
+
+    # Report at end of training
+    if not early_stop_triggered:
+        print(f"\nTraining finished after {num_epochs} epochs.")
+    else:
+        print(f"\nTraining stopped early.")
+
+    print(f"Best Validation AUPRC achieved: {max(current_auprcs):.4f}")
+    print("Validation AUPRC history:", [f"{x:.4f}" for x in current_auprcs])

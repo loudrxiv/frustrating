@@ -457,7 +457,7 @@ if __name__ == "__main__":
 
     #--- (1) Set up parameters and dataloders
 
-    train_file, tf, target, _lambda, match_mean, holdout = sys.argv
+    tune_file, tf, target, _lambda, match_mean, holdout = sys.argv
 
     # Convert hyperparameters to appropriate types
     _lambda     = float(_lambda)
@@ -540,7 +540,7 @@ if __name__ == "__main__":
 
     for epoch in range(0, num_epochs):
 
-        print(f"\nEpoch: {epoch}\n")
+        print(f"\n--- Training (on epoch {epoch}) ---\n")
 
         # Turn on training mode
         feature_extractor.train()
@@ -625,7 +625,7 @@ if __name__ == "__main__":
 
         #--- Validation
 
-        print("\n--- Starting Validation ---")
+        print(f"\n--- Validation (on epoch {epoch}) ---\n")
         
         with torch.no_grad():
 
@@ -643,6 +643,7 @@ if __name__ == "__main__":
 
             target_auprc    = print_val_metrics(params, val_results)
             current_auprcs  = auprcs
+
             if len(current_auprcs) == 0 or target_auprc > max(current_auprcs):
                 print("Best model so far! (target species) validation auPRC = ", target_auprc)            
                 epochs_no_improve = 0
@@ -652,7 +653,7 @@ if __name__ == "__main__":
 
             # Check for early stopping
             if epochs_no_improve >= patience:
-                print(f"\nEarly stopping triggered after {epoch + 1} epochs!")
+                print(f"\nEarly stopping triggered after {epoch} epochs!")
                 early_stop_triggered = True
                 break # Exit the main training loop
 

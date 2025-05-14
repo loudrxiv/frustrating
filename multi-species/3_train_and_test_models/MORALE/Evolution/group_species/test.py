@@ -381,7 +381,7 @@ if __name__ == "__main__":
     # Construct the parameters
     params  = Params(args = [f"EvoGS-{num_holdout}", tf, target], verbose=True)
 
-    # Define relatedness based on the target species
+    # Modulate the number of source species based on relatedness
     if params.target_species == "hg38":
         evolutionary_relatedness    = ["rheMac10", "mm10", "rn7", "canFam6"]
     elif params.target_species == "rheMac10":
@@ -397,7 +397,9 @@ if __name__ == "__main__":
 
     # Modulate the source species to remove the holdout
     print(f"\nHolding out {evolutionary_relatedness[:num_holdout]} from the source species.")
+
     params.source_species = list(filter(lambda x: x not in evolutionary_relatedness[:num_holdout], params.source_species))
+    
     print(f"New source species: {params.source_species}")
 
     print("\n---------------------------------------\n")

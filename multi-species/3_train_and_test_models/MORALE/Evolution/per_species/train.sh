@@ -2,11 +2,11 @@
 
 #SBATCH --partition=dept_gpu
 #SBATCH --gres=gpu:1
-#SBATCH --constraint="[M46|M40|M24]"
+#SBATCH --constraint="[M46|M40]"
 #SBATCH --job-name=tr_evo
-#SBATCH --output=evo/%j.out
-#SBATCH --error=evo/%j.err
-#SBATCH --mem=180G
+#SBATCH --output=train/%j.out
+#SBATCH --error=train/%j.err
+#SBATCH --mem=220G
 date;hostname;id
 printf "========================\n"
 
@@ -40,7 +40,7 @@ mkdir -p $TRAIN_LOGS
 
 # (1) Activate conda
 echo 'activating conda environment'
-source activate genomic_tools
+source activate pytorch
 which python
 
 # (2) Now run a single training job 

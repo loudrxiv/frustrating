@@ -1,0 +1,259 @@
+---
+Title: "Evoution plots per species"
+output: html_document
+---
+
+```{r, load libraries}
+
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(ggbeeswarm)
+library(ggforce)
+library(ggpubr)
+library(ggtext) #For styling the text
+
+```
+```{r set paths}
+
+# Declare transciption factors (we want to make quicker prototype sets too)
+TFs         <- c("CEBPA", "HNF4A", "HNF6", "FOXA1")
+
+# Set the root directory
+ROOT        <- file.path(getwd())
+ROOT_PLOTS  <- file.path(ROOT, "plots", "Supp_all-evolution-plots")
+SAVE        <- TRUE
+
+```
+# Load CSVs (saved)
+```{r load csvs}
+
+evo_metrics <- read.csv(file.path(ROOT_PLOTS, "evo-per-species_performance.csv"))
+
+```
+
+# Plot mm10
+## Replace the holdout names
+```{r}
+
+df          <- evo_metrics |> filter(Species == "mm10")
+
+df$Holdouts[is.na(df$Holdouts)] <- "No Knockouts"
+df$Holdouts[df$Holdouts == "0"] <- "-rn7"
+df$Holdouts[df$Holdouts == "1"] <- "-rheMac10"
+df$Holdouts[df$Holdouts == "2"] <- "-hg38"
+df$Holdouts[df$Holdouts == "3"] <- "-canFam6"
+
+# Reorganize
+df$Holdouts <- factor(df$Holdouts, levels = c(
+    "No Knockouts",
+    "-rn7",
+    "-rheMac10",
+    "-hg38",
+    "-canFam6"
+))
+
+```
+## Create the plot
+```{r}
+
+auPRC_plot <- ggplot(df, aes(x = factor(Holdouts), y = auPRC)) +
+    geom_bar(position="dodge", stat="identity", fill = "steelblue") +
+    xlab(NULL) +
+    labs(
+        title = "Target=mm10",
+        colour = "Holdouts"
+    ) +
+    ylab("auPRC based on holdout species") +
+    facet_wrap(~ TF, scales = "free_y", nrow=1, ncol=4) +
+    theme(
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 14, face = "plain"),
+        axis.text.y = element_text(hjust = 1, size = 14, face = "plain"),
+        axis.title.y = element_text(size = 16, face = "plain"),
+        panel.spacing.x = unit(1, "lines"),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1.5),
+        strip.text = element_text(face = "bold", size = 12),
+        legend.position = "none"
+    )
+
+if (SAVE) {
+    ggsave(
+        filename=file.path(ROOT_PLOTS, "EvoPS-mm10.pdf"),
+        plot=auPRC_plot,
+        device="pdf",
+        dpi=600
+    )
+} else {
+    auPRC_plot
+}
+
+```
+# Plot rn7
+## Replace the holdout names
+```{r}
+
+df          <- evo_metrics |> filter(Species == "rn7")
+
+df$Holdouts[is.na(df$Holdouts)] <- "No Knockouts"
+df$Holdouts[df$Holdouts == "0"] <- "-mm10"
+df$Holdouts[df$Holdouts == "1"] <- "-rheMac10"
+df$Holdouts[df$Holdouts == "2"] <- "-hg38"
+df$Holdouts[df$Holdouts == "3"] <- "-canFam6"
+
+# Reorganize
+df$Holdouts <- factor(df$Holdouts, levels = c(
+    "No Knockouts",
+    "-mm10",
+    "-rheMac10",
+    "-hg38",
+    "-canFam6"
+))
+
+```
+## Create the plot
+```{r}
+
+auPRC_plot <- ggplot(df, aes(x = factor(Holdouts), y = auPRC)) +
+    geom_bar(position="dodge", stat="identity", fill = "steelblue") +
+    xlab(NULL) +
+    labs(
+        title = "Target=rn7",
+        colour = "Holdouts"
+    ) +
+    ylab("auPRC based on holdout species") +
+    facet_wrap(~ TF, scales = "free_y", nrow=1, ncol=4) +
+    theme(
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 14, face = "plain"),
+        axis.text.y = element_text(hjust = 1, size = 14, face = "plain"),
+        axis.title.y = element_text(size = 16, face = "plain"),
+        panel.spacing.x = unit(1, "lines"),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1.5),
+        strip.text = element_text(face = "bold", size = 12),
+        legend.position = "none"
+    )
+
+if (SAVE) {
+    ggsave(
+        filename=file.path(ROOT_PLOTS, "EvoPS-rn7.pdf"),
+        plot=auPRC_plot,
+        device="pdf",
+        dpi=600
+    )
+} else {
+    auPRC_plot
+}
+
+```
+
+# Plot rheMac10
+## Replace the holdout names
+```{r}
+
+df          <- evo_metrics |> filter(Species == "rheMac10")
+
+df$Holdouts[is.na(df$Holdouts)] <- "No Knockouts"
+df$Holdouts[df$Holdouts == "0"] <- "-hg38"
+df$Holdouts[df$Holdouts == "1"] <- "-mm10"
+df$Holdouts[df$Holdouts == "2"] <- "-rn7"
+df$Holdouts[df$Holdouts == "3"] <- "-canFam6"
+
+# Reorganize
+df$Holdouts <- factor(df$Holdouts, levels = c(
+    "No Knockouts",
+    "-hg38",
+    "-mm10",
+    "-rn7",
+    "-canFam6"
+))
+
+```
+## Create the plot
+```{r}
+
+auPRC_plot <- ggplot(df, aes(x = factor(Holdouts), y = auPRC)) +
+    geom_bar(position="dodge", stat="identity", fill = "steelblue") +
+    xlab(NULL) +
+    labs(
+        title = "Target=rheMac10",
+        colour = "Holdouts"
+    ) +
+    ylab("auPRC based on holdout species") +
+    facet_wrap(~ TF, scales = "free_y", nrow=1, ncol=4) +
+    theme(
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 14, face = "plain"),
+        axis.text.y = element_text(hjust = 1, size = 14, face = "plain"),
+        axis.title.y = element_text(size = 16, face = "plain"),
+        panel.spacing.x = unit(1, "lines"),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1.5),
+        strip.text = element_text(face = "bold", size = 12),
+        legend.position = "none"
+    )
+
+if (SAVE) {
+    ggsave(
+        filename=file.path(ROOT_PLOTS, "EvoPS-rheMac10.pdf"),
+        plot=auPRC_plot,
+        device="pdf",
+        dpi=600
+    )
+} else {
+    auPRC_plot
+}
+
+```
+# Plot canFam6
+## Replace the holdout names
+```{r}
+
+df          <- evo_metrics |> filter(Species == "canFam6")
+
+df$Holdouts[is.na(df$Holdouts)] <- "No Knockouts"
+df$Holdouts[df$Holdouts == "0"] <- "-hg38"
+df$Holdouts[df$Holdouts == "1"] <- "-rheMac10"
+df$Holdouts[df$Holdouts == "2"] <- "-mm10"
+df$Holdouts[df$Holdouts == "3"] <- "-rn7"
+
+# Reorganize
+df$Holdouts <- factor(df$Holdouts, levels = c(
+    "No Knockouts",
+    "-hg38",
+    "-rheMac10",
+    "-mm10",
+    "-rn7"
+))
+
+```
+## Create the plot
+```{r}
+
+auPRC_plot <- ggplot(df, aes(x = factor(Holdouts), y = auPRC)) +
+    geom_bar(position="dodge", stat="identity", fill = "steelblue") +
+    xlab(NULL) +
+    labs(
+        title = "Target=canFam6",
+        colour = "Holdouts"
+    ) +
+    ylab("auPRC based on holdout species") +
+    facet_wrap(~ TF, scales = "free_y", nrow=1, ncol=4) +
+    theme(
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 14, face = "plain"),
+        axis.text.y = element_text(hjust = 1, size = 14, face = "plain"),
+        axis.title.y = element_text(size = 16, face = "plain"),
+        panel.spacing.x = unit(1, "lines"),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1.5),
+        strip.text = element_text(face = "bold", size = 12),
+        legend.position = "none"
+    )
+
+if (SAVE) {
+    ggsave(
+        filename=file.path(ROOT_PLOTS, "EvoPS-canFam6.pdf"),
+        plot=auPRC_plot,
+        device="pdf",
+        dpi=600
+    )
+} else {
+    auPRC_plot
+}
+
+```

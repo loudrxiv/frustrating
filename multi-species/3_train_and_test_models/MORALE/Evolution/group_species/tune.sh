@@ -3,7 +3,7 @@
 #SBATCH --partition=dept_gpu
 #SBATCH --gres=gpu:1
 #SBATCH --constraint="[M46|M40]"
-#SBATCH --job-name=tuning_evo_gs
+#SBATCH --job-name=tune_evogs
 #SBATCH --output=tune/%j.out
 #SBATCH --error=tune/%j.err
 #SBATCH --mem=220G
@@ -40,7 +40,7 @@ mkdir -p $TUNE_LOGS
 
 # (1) Activate conda
 echo 'activating conda environment'
-source activate genomic_tools
+source activate pytorch
 which python
 
 # (2) Point to the tuning file we need

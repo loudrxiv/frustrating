@@ -40,7 +40,7 @@ mkdir -p $TEST_LOGS
 
 # (1) Activate conda
 echo 'activating conda environment'
-source activate genomic_tools
+source activate pytorch
 which python
 
 # (2) Now run a single test job

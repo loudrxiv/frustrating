@@ -21,10 +21,14 @@ mkdir -p "$models_dir"
 ## "CEBPA" "FOXA1" "HNF4A" "HNF6"
 tfs=( "CEBPA" "FOXA1" "HNF4A" "HNF6" )
 
-# The index of the num_holdout to use for training
+# Target species to predict on, we have the following options:
+## "hg38" "mm10" "rn7" "canFam6" "rheMac10"
+targets=( "mm10" "rn7" "canFam6" "rheMac10" )
+
+# The index of the holdout to use for training
 # We have the following options:
 ## 0 1 2 3
-num_holdouts=( 0 1 2 3 )
+holdouts=( 0 1 2 3 )
 
 # Create the train_array.txt file
 
@@ -33,72 +37,323 @@ if [ -f train_array.txt ]; then
 	touch train_array.txt
 fi
 
-target="hg38" # always do hg38 here
-for tf in "${tfs[@]}"; do
-	for num_holdout in "${num_holdouts[@]}"; do
+for target in "${targets[@]}"; do
+	for tf in "${tfs[@]}"; do
+		for holdout in "${holdouts[@]}"; do
 
-		if [ "$tf" == "CEBPA" ]; then
-			if [ "$num_holdout" == "0" ]; then
-				_lambda="3.0"
-				_match_mean="1"
-			elif [ "$num_holdout" == "1" ]; then
-				_lambda="3.0"
-				_match_mean="1"
-			elif [ "$num_holdout" == "2" ]; then
-				_lambda="8.0"
-				_match_mean="1"
-			elif [ "$num_holdout" == "3" ]; then
-				_lambda="8.0"
-				_match_mean="1"
+			if [ "$target" == "hg38" ]; then
+				if [ "$tf" == "CEBPA" ]; then
+					if [ "$holdout" == "0" ]; then
+						_lambda="3.0"
+						_match_mean="1"
+					elif [ "$holdout" == "1" ]; then
+						_lambda="3.0"
+						_match_mean="1"
+					elif [ "$holdout" == "2" ]; then
+						_lambda="8.0"
+						_match_mean="1"
+					elif [ "$holdout" == "3" ]; then
+						_lambda="8.0"
+						_match_mean="1"
+					fi
+				elif [ "$tf" == "FOXA1" ]; then
+					if [ "$holdout" == "0" ]; then
+						_lambda="8.0"
+						_match_mean="1"
+					elif [ "$holdout" == "1" ]; then
+						_lambda="5.0"
+						_match_mean="1"
+					elif [ "$holdout" == "2" ]; then
+						_lambda="7.0"
+						_match_mean="1"
+					elif [ "$holdout" == "3" ]; then
+						_lambda="3.0"
+						_match_mean="1"
+					fi
+				elif [ "$tf" == "HNF4A" ]; then
+					if [ "$holdout" == "0" ]; then
+						_lambda="8.0"
+						_match_mean="1"
+					elif [ "$holdout" == "1" ]; then
+						_lambda="8.0"
+						_match_mean="1"
+					elif [ "$holdout" == "2" ]; then
+						_lambda="8.0"
+						_match_mean="1"
+					elif [ "$holdout" == "3" ]; then
+						_lambda="7.0"
+						_match_mean="1"
+					fi
+				elif [ "$tf" == "HNF6" ]; then
+					if [ "$holdout" == "0" ]; then
+						_lambda="6.0"
+						_match_mean="0"
+					elif [ "$holdout" == "1" ]; then
+						_lambda="4.0"
+						_match_mean="1"
+					elif [ "$holdout" == "2" ]; then
+						_lambda="5.0"
+						_match_mean="1"
+					elif [ "$holdout" == "3" ]; then
+						_lambda="3.0"
+						_match_mean="1"
+					fi
+				else
+					printf "Invalid TF: $tf\n"
+					exit 1
+				fi
+			elif [ "$target" == "mm10" ]; then
+				if [ "$tf" == "CEBPA" ]; then
+					if [ "$holdout" == "0" ]; then
+						_lambda="1.0"
+						_match_mean="1"
+					elif [ "$holdout" == "1" ]; then
+						_lambda="7.0"
+						_match_mean="1"
+					elif [ "$holdout" == "2" ]; then
+						_lambda="7.0"
+						_match_mean="1"
+					elif [ "$holdout" == "3" ]; then
+						_lambda="7.0"
+						_match_mean="1"
+					fi
+				elif [ "$tf" == "FOXA1" ]; then
+					if [ "$holdout" == "0" ]; then
+						_lambda="3.0"
+						_match_mean="1"
+					elif [ "$holdout" == "1" ]; then
+						_lambda="1.0"
+						_match_mean="1"
+					elif [ "$holdout" == "2" ]; then
+						_lambda="3.0"
+						_match_mean="1"
+					elif [ "$holdout" == "3" ]; then
+						_lambda="7.0"
+						_match_mean="0"
+					fi
+				elif [ "$tf" == "HNF4A" ]; then
+					if [ "$holdout" == "0" ]; then
+						_lambda="1.0"
+						_match_mean="0"
+					elif [ "$holdout" == "1" ]; then
+						_lambda="7.0"
+						_match_mean="1"
+					elif [ "$holdout" == "2" ]; then
+						_lambda="7.0"
+						_match_mean="0"
+					elif [ "$holdout" == "3" ]; then
+						_lambda="7.0"
+						_match_mean="1"
+					fi
+				elif [ "$tf" == "HNF6" ]; then
+					if [ "$holdout" == "0" ]; then
+						_lambda="7.0"
+						_match_mean="0"
+					elif [ "$holdout" == "1" ]; then
+						_lambda="3.0"
+						_match_mean="1"
+					elif [ "$holdout" == "2" ]; then
+						_lambda="1.0"
+						_match_mean="1"
+					elif [ "$holdout" == "3" ]; then
+						_lambda="1.0"
+						_match_mean="1"
+					fi
+				else
+					printf "Invalid TF: $tf\n"
+					exit 1
+				fi
+			elif [ "$target" == "rn7" ]; then
+				if [ "$tf" == "CEBPA" ]; then
+					if [ "$holdout" == "0" ]; then
+						_lambda="7.0"
+						_match_mean="1"
+					elif [ "$holdout" == "1" ]; then
+						_lambda="3.0"
+						_match_mean="1"
+					elif [ "$holdout" == "2" ]; then
+						_lambda="3.0"
+						_match_mean="1"
+					elif [ "$holdout" == "3" ]; then
+						_lambda="7.0"
+						_match_mean="1"
+					fi
+				elif [ "$tf" == "FOXA1" ]; then
+					if [ "$holdout" == "0" ]; then
+						_lambda="1.0"
+						_match_mean="0"
+					elif [ "$holdout" == "1" ]; then
+						_lambda="1.0"
+						_match_mean="1"
+					elif [ "$holdout" == "2" ]; then
+						_lambda="3.0"
+						_match_mean="1"
+					elif [ "$holdout" == "3" ]; then
+						_lambda="7.0"
+						_match_mean="0"
+					fi
+				elif [ "$tf" == "HNF4A" ]; then
+					if [ "$holdout" == "0" ]; then
+						_lambda="7.0"
+						_match_mean="1"
+					elif [ "$holdout" == "1" ]; then
+						_lambda="1.0"
+						_match_mean="1"
+					elif [ "$holdout" == "2" ]; then
+						_lambda="3.0"
+						_match_mean="1"
+					elif [ "$holdout" == "3" ]; then
+						_lambda="7.0"
+						_match_mean="0"
+					fi
+				elif [ "$tf" == "HNF6" ]; then
+					if [ "$holdout" == "0" ]; then
+						_lambda="7.0"
+						_match_mean="0"
+					elif [ "$holdout" == "1" ]; then
+						_lambda="1.0"
+						_match_mean="1"
+					elif [ "$holdout" == "2" ]; then
+						_lambda="1.0"
+						_match_mean="1"
+					elif [ "$holdout" == "3" ]; then
+						_lambda="3.0"
+						_match_mean="1"
+					fi
+				else
+					printf "Invalid TF: $tf\n"
+					exit 1
+				fi
+			elif [ "$target" == "canFam6" ]; then
+				if [ "$tf" == "CEBPA" ]; then
+					if [ "$holdout" == "0" ]; then
+						_lambda="3.0"
+						_match_mean="1"
+					elif [ "$holdout" == "1" ]; then
+						_lambda="1.0"
+						_match_mean="0"
+					elif [ "$holdout" == "2" ]; then
+						_lambda="3.0"
+						_match_mean="1"
+					elif [ "$holdout" == "3" ]; then
+						_lambda="1.0"
+						_match_mean="1"
+					fi
+				elif [ "$tf" == "FOXA1" ]; then
+					if [ "$holdout" == "0" ]; then
+						_lambda="3.0"
+						_match_mean="0"
+					elif [ "$holdout" == "1" ]; then
+						_lambda="3.0"
+						_match_mean="1"
+					elif [ "$holdout" == "2" ]; then
+						_lambda="3.0"
+						_match_mean="1"
+					elif [ "$holdout" == "3" ]; then
+						_lambda="3.0"
+						_match_mean="0"
+					fi
+				elif [ "$tf" == "HNF4A" ]; then
+					if [ "$holdout" == "0" ]; then
+						_lambda="7.0"
+						_match_mean="1"
+					elif [ "$holdout" == "1" ]; then
+						_lambda="1.0"
+						_match_mean="0"
+					elif [ "$holdout" == "2" ]; then
+						_lambda="3.0"
+						_match_mean="1"
+					elif [ "$holdout" == "3" ]; then
+						_lambda="3.0"
+						_match_mean="1"
+					fi
+				elif [ "$tf" == "HNF6" ]; then
+					if [ "$holdout" == "0" ]; then
+						_lambda="7.0"
+						_match_mean="1"
+					elif [ "$holdout" == "1" ]; then
+						_lambda="7.0"
+						_match_mean="0"
+					elif [ "$holdout" == "2" ]; then
+						_lambda="3.0"
+						_match_mean="0"
+					elif [ "$holdout" == "3" ]; then
+						_lambda="1.0"
+						_match_mean="0"
+					fi
+				else
+					printf "Invalid TF: $tf\n"
+					exit 1
+				fi
+			elif [ "$target" == "rheMac10" ]; then
+				if [ "$tf" == "CEBPA" ]; then
+					if [ "$holdout" == "0" ]; then
+						_lambda="1.0"
+						_match_mean="1"
+					elif [ "$holdout" == "1" ]; then
+						_lambda="7.0"
+						_match_mean="0"
+					elif [ "$holdout" == "2" ]; then
+						_lambda="3.0"
+						_match_mean="1"
+					elif [ "$holdout" == "3" ]; then
+						_lambda="7.0"
+						_match_mean="0"
+					fi
+				elif [ "$tf" == "FOXA1" ]; then
+					if [ "$holdout" == "0" ]; then
+						_lambda="1.0"
+						_match_mean="1"
+					elif [ "$holdout" == "1" ]; then
+						_lambda="3.0"
+						_match_mean="0"
+					elif [ "$holdout" == "2" ]; then
+						_lambda="3.0"
+						_match_mean="0"
+					elif [ "$holdout" == "3" ]; then
+						_lambda="7.0"
+						_match_mean="0"
+					fi
+				elif [ "$tf" == "HNF4A" ]; then
+					if [ "$holdout" == "0" ]; then
+						_lambda="3.0"
+						_match_mean="0"
+					elif [ "$holdout" == "1" ]; then
+						_lambda="7.0"
+						_match_mean="1"
+					elif [ "$holdout" == "2" ]; then
+						_lambda="7.0"
+						_match_mean="1"
+					elif [ "$holdout" == "3" ]; then
+						_lambda="7.0"
+						_match_mean="0"
+					fi
+				elif [ "$tf" == "HNF6" ]; then
+					if [ "$holdout" == "0" ]; then
+						_lambda="7.0"
+						_match_mean="1"
+					elif [ "$holdout" == "1" ]; then
+						_lambda="3.0"
+						_match_mean="0"
+					elif [ "$holdout" == "2" ]; then
+						_lambda="1.0"
+						_match_mean="0"
+					elif [ "$holdout" == "3" ]; then
+						_lambda="7.0"
+						_match_mean="0"
+					fi
+				else
+					printf "Invalid TF: $tf\n"
+					exit 1
+				fi
+			else
+				printf "Invalid target: $target\n"
+				exit  1
 			fi
-		elif [ "$tf" == "FOXA1" ]; then
-			if [ "$num_holdout" == "0" ]; then
-				_lambda="8.0"
-				_match_mean="1"
-			elif [ "$num_holdout" == "1" ]; then
-				_lambda="5.0"
-				_match_mean="1"
-			elif [ "$num_holdout" == "2" ]; then
-				_lambda="7.0"
-				_match_mean="1"
-			elif [ "$num_holdout" == "3" ]; then
-				_lambda="3.0"
-				_match_mean="1"
-			fi
-		elif [ "$tf" == "HNF4A" ]; then
-			if [ "$num_holdout" == "0" ]; then
-				_lambda="8.0"
-				_match_mean="0"
-			elif [ "$num_holdout" == "1" ]; then
-				_lambda="8.0"
-				_match_mean="1"
-			elif [ "$num_holdout" == "2" ]; then
-				_lambda="8.0"
-				_match_mean="1"
-			elif [ "$num_holdout" == "3" ]; then
-				_lambda="7.0"
-				_match_mean="1"
-			fi
-		elif [ "$tf" == "HNF6" ]; then
-			if [ "$num_holdout" == "0" ]; then
-				_lambda="6.0"
-				_match_mean="0"
-			elif [ "$num_holdout" == "1" ]; then
-				_lambda="4.0"
-				_match_mean="1"
-			elif [ "$num_holdout" == "2" ]; then
-				_lambda="5.0"
-				_match_mean="1"
-			elif [ "$num_holdout" == "3" ]; then
-				_lambda="3.0"
-				_match_mean="1"
-			fi
-		else
-			printf "Invalid TF: $tf\n"
-			exit 1
-		fi
 
-		printf "%s,%s,%s,%s,%s\n" $tf $target $_lambda $_match_mean $num_holdout >> train_array.txt
+			printf "%s,%s,%s,%s,%s\n" $tf $target $_lambda $_match_mean $holdout >> train_array.txt
+
+		done
 	done
 done
 

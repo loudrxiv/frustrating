@@ -19,24 +19,21 @@ NUM_LAMBDAS=3
 
 # TFs to train models over. We have the following options:
 ## "CEBPA" "FOXA1" "HNF4A" "HNF6"
-tfs=( "HNF6" )
+tfs=( "CEBPA" "FOXA1" "HNF4A" "HNF6" )
 
 # The target species to train the model on. We have the
 # following options:
 ## "mm10" "rn7" "rheMac10" "canFam6" "hg38"
-targets=( "hg38" )
+targets=( "mm10" "rn7" "rheMac10" "canFam6" )
 
 # The index of the holdout to use for training
 # We have the following options:
 ## 0 1 2 3
-num_holdouts=( 0 1 2 )
-
-# Whether or not to match the mean of the target species
-## 0 1
-should_match=( 0 1 )
+holdouts=( 0 1 2 3 )
 
 # (2) Set the hyperparameters to tune over
 
+should_match=( 0 1 )
 lambdas=()
 if [ "$TUNE_TYPE" == "GRID" ]; then
 	for i in $(seq 0.0 0.5 3.0); do
@@ -67,11 +64,11 @@ fi
 # We will train a model for each TF on each target species
 for tf in "${tfs[@]}"; do
 	for target in "${targets[@]}"; do
-		for num_holdout in "${num_holdouts[@]}"; do
+		for holdout in "${holdouts[@]}"; do
 			for match_mean in "${should_match[@]}"; do
 				for ((i =0; i < num_lambdas; i++)); do
 					_lambda=${lambdas[$i]}
-					printf "%s,%s,%s,%s,%s\n" $tf $target $_lambda $match_mean $num_holdout >> tune_array.txt
+					printf "%s,%s,%s,%s,%s\n" $tf $target $_lambda $match_mean $holdout >> tune_array.txt
 				done
 			done
 		done

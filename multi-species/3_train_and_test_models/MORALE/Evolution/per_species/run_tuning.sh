@@ -19,12 +19,12 @@ NUM_LAMBDAS=3
 
 # TFs to train models over. We have the following options:
 ## "CEBPA" "FOXA1" "HNF4A" "HNF6"
-tfs=( "HNF4A" "HNF6" )
+tfs=( "HNF6" )
 
 # The target species to train the model on. We have the
 # following options:
 ## "mm10" "rn7" "rheMac10" "canFam6" "hg38"
-targets=( "mm10" "rn7" "rheMac10" "canFam6" )
+targets=( "mm10" )
 
 # The index of the holdout to use for training
 # We have the following options:
