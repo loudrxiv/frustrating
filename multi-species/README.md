@@ -1,7 +1,6 @@
 ## Setup
 
 This is the subdirectory for the multi-species analyses, where we will step through each broad phase of data creation and model training. The first thing you must do is setup the directories in a similar manner to how the scripts expect:
-
 ```
 ./setup_directories.sh
 ```
@@ -18,7 +17,6 @@ All of these aforementioned steps are controlled by the master script: `run_pipe
 4. And finally, `4_create_all-alls` generates binary labels and such for those windows
 
 You must run each step. This is how you can do it:
-
 ```
 ./run_pipeline.sh 1_generate_data
 ```
@@ -26,7 +24,6 @@ You must run each step. This is how you can do it:
  ## 2. Splitting created datasets into training, validation, and testing
 
 Now that we have the data, all together, our next step is to split it into training, testing and validation! Once again, we have a master script that controls these processes. We solve a linear program in order to etch ~10% of data for validation and ~10% for testing, with the idea being we preserve the overall binding ratio. In order to split the data, run:
-
 ```
 ./create_all_data.sh
 ```

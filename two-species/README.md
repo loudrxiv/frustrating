@@ -41,7 +41,7 @@ However, BEFORE running the preprocessing steps, you must have data. Please refe
             └── mgps_out_RXRA.bed
 ```
 
-If you want to change this, you a different software, or whatever else: you **MUST** alter the code 👿.
+If you want to change this, use a different software, or whatever else: you **MUST** alter the code 👿.
 
 ### 1. Make training and testing data
 
