@@ -88,12 +88,12 @@ human_target_plot <- ggplot(data = df, aes(x = Model, y = auPRC, color = Model))
     ) +
     facet_wrap(~ TF, scales = "free_y", nrow=1, ncol=4) +
     theme(
-        axis.text.x = element_text(angle = 45, hjust = 1, size = 14, face = "plain"),
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 16, face = "bold"),
         axis.text.y = element_text(hjust = 1, size = 16, face = "plain"),
-        axis.title.y = element_text(size = 18, face = "plain"),
+        axis.title.y = element_text(size = 18, face = "bold"),
         panel.spacing.x = unit(1, "lines"),
         panel.border = element_rect(colour = "black", fill = NA, size = 1.5),
-        strip.text = element_text(face = "bold", size = 12),
+        strip.text = element_text(face = "bold", size = 18),
         legend.position = "none"
     ) + stat_compare_means(method = "t.test", paired = T, comparisons = my_comparisons)
 
@@ -159,12 +159,12 @@ mouse_target_plot <- ggplot(data = df, aes(x = Model, y = auPRC, color = Model))
     ) +
     facet_wrap(~ TF, scales = "free_y", nrow=1, ncol=4) +
     theme(
-        axis.text.x = element_text(angle = 45, hjust = 1, size = 14, face = "plain"),
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 16, face = "bold"),
         axis.text.y = element_text(hjust = 1, size = 16, face = "plain"),
-        axis.title.y = element_text(size = 18, face = "plain"),
+        axis.title.y = element_text(size = 18, face = "bold"),
         panel.spacing.x = unit(1, "lines"),
         panel.border = element_rect(colour = "black", fill = NA, size = 1.5),
-        strip.text = element_text(face = "bold", size = 12),
+        strip.text = element_text(face = "bold", size = 18),
         legend.position = "none"
     ) + stat_compare_means(method = "t.test", paired = T, comparisons = my_comparisons)
 
