@@ -22,7 +22,7 @@ TFs         <- c("CEBPA", "HNF4A", "HNF6", "FOXA1")
 # Set the root directory
 ROOT        <- file.path(getwd())
 ROOT_PLOTS  <- file.path(ROOT, "plots", "Supp_all-evolution-plots")
-SAVE        <- TRUE
+SAVE        <- FALSE
 
 ```
 # Load CSVs (saved)

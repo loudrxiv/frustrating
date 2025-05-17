@@ -22,7 +22,7 @@ TFs         <- c("CEBPA", "HNF4A", "HNF6", "FOXA1")
 # Set the root directory
 ROOT        <- file.path(getwd())
 ROOT_PLOTS  <- file.path(ROOT, "plots", "Figure6")
-SAVE        <- TRUE
+SAVE        <- FALSE
 
 ```
 # Load CSVs (saved)
@@ -30,8 +30,10 @@ SAVE        <- TRUE
 
 evo_metrics     <- read.csv(file.path(ROOT_PLOTS, "evo-per-species_performance.csv"))
 
-# Replace the holdout names
-df <- evo_metrics
+```
+```{r load csvs}
+
+df  <- evo_metrics |> filter(Species == "hg38")
 
 df$Holdouts[is.na(df$Holdouts)] <- "No Knockouts"
 df$Holdouts[df$Holdouts == "0"] <- "-rheMac10"
@@ -59,12 +61,12 @@ auPRC_plot <- ggplot(df, aes(x = factor(Holdouts), y = auPRC)) +
     ylab("auPRC based on holdout species") +
     facet_wrap(~ TF, scales = "free_y", nrow=1, ncol=4) +
     theme(
-        axis.text.x = element_text(angle = 45, hjust = 1, size = 14, face = "plain"),
-        axis.text.y = element_text(hjust = 1, size = 14, face = "plain"),
-        axis.title.y = element_text(size = 16, face = "plain"),
+        axis.text.x = element_text(angle = 90, hjust = 1, size = 16, face = "bold"),
+        axis.text.y = element_text(hjust = 1, size = 16, face = "plain"),
+        axis.title.y = element_text(size = 18, face = "bold"),
         panel.spacing.x = unit(1, "lines"),
         panel.border = element_rect(colour = "black", fill = NA, size = 1.5),
-        strip.text = element_text(face = "bold", size = 12),
+        strip.text = element_text(face = "bold", size = 18),
         legend.position = "none"
     )
 
