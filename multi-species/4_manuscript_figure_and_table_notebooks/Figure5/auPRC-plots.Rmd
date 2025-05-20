@@ -62,12 +62,12 @@ human_target_plot <- ggplot(data = df, aes(x = Model, y = auPRC, color = Model, 
     ) +
     facet_wrap(~ TF, scales = "free_y", nrow=1, ncol=4) +
     theme(
-        axis.text.x = element_text(angle = 45, hjust = 1, size = 16, face = "bold"),
-        axis.text.y = element_text(hjust = 1, size = 16, face = "plain"),
-        axis.title.y = element_text(size = 18, face = "bold"),
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 30, face = "bold"),
+        axis.text.y = element_text(hjust = 1, size = 25, face = "plain"),
+        axis.title.y = element_text(size = 30, face = "bold"),
         panel.spacing.x = unit(1, "lines"),
         panel.border = element_rect(colour = "black", fill = NA, size = 1.5),
-        strip.text = element_text(face = "bold", size = 18),
+        strip.text = element_text(face = "bold", size = 30),
         legend.position = "none"
     )
 
