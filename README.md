@@ -7,7 +7,7 @@
 The following code pairs with what we report in the work above. We provide an non adversarial approach, under the scope of unsupervised domain-adaptation, to characterize regulatory genomic function (i.e., transcription factor binding).
 
 If you would like to go through the manuscript, it will be available on the following platforms:
-- [bioRxiv](https://www.britannica.com/animal/cat)
+- [bioRxiv](https://www.biorxiv.org/content/10.1101/2025.05.21.655414v1)
 - [ICIBM 2025 (Hopefully)](https://www.greensboro.carolinavet.com/site/greensboro-specialty-veterinary-blog/2023/03/15/how-to-choose-cat-breed)
 - [Journal (Eventually)](https://www.nationalgeographic.com/animals/mammals/facts/domestic-cat)
 
