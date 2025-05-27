@@ -30,5 +30,16 @@ For model training and the like, we used the HPC available to students in the Un
 ## How to cite
 
 ```
-TBD
+@article {Ebeid2025.05.21.655414,
+	author = {Ebeid, Mark Maher and Balci, Ali Tugrul and Chikina, Maria and Benos, Panayiotis V and Kostka, Dennis},
+	title = {Frustratingly easy domain adaptation for cross-species transcription factor binding prediction},
+	elocation-id = {2025.05.21.655414},
+	year = {2025},
+	doi = {10.1101/2025.05.21.655414},
+	publisher = {Cold Spring Harbor Laboratory},
+	abstract = {Motivation: Sequence-to-function models interpret genomic DNA and predict functional outputs, successfully characterizing regulatory sequence activity. However, interpreting these models remains challenging, raising questions about the generalizability of inferred sequence functions. Cross-species prediction of transcription factor (TF) binding offers a promising approach to enhance model generalization by leveraging sequence variation across species, and it can contribute to the discovery of a conserved gene-regulatory code. However, addressing systematic differences between the genomes of various species is a significant challenge. Results: We introduce MORALE, a framework that utilizes a well-established domain adaptation approach that is "frustratingly easy." MORALE trains on sequences from one or more source species and predicts TF binding on a single target species where no binding data is available. To learn an invariant cross-species sequence representation, MORALE aligns the first and second moments of the data-generating distribution between all species. This direct approach integrates easily into representation learning models with an embedding layer. Unlike alternatives such as adversarial learning, it does not require additional parameters or other model design choices. We apply MORALE to two ChIP-seq datasets of liver-essential TFs: one comprising human and mouse, and another comprising five mammalian species. Compared to both a baseline and an adversarial approach termed gradient reversal (GRL), MORALE demonstrates improved performance across all TFs in the two-species case. Importantly, it avoids a performance degradation observed with the GRL approach in this study. Furthermore, feature attribution revealed that important motifs discovered by MORALE were closer to the actual TF binding motif compared with the GRL approach. For the five-species case, our method significantly improved TF binding site prediction for all TFs when predicting on human data, surpassing the performance of a human-only model -- a result not observed in the two-species comparison. Overall, MORALE is a direct and competitive approach that leverages domain adaptation techniques to improve cross-species TF binding site prediction.Competing Interest StatementThe authors have declared no competing interest.National Heart Lung and Blood Institute, https://ror.org/012pb6c26, R01HL127349, R01HL159805National Institute of Dental and Craniofacial Research, https://ror.org/004a2wv92, R01DE032707},
+	URL = {https://www.biorxiv.org/content/early/2025/05/26/2025.05.21.655414},
+	eprint = {https://www.biorxiv.org/content/early/2025/05/26/2025.05.21.655414.full.pdf},
+	journal = {bioRxiv}
+}
 ```
