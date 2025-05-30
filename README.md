@@ -43,3 +43,7 @@ For model training and the like, we used the HPC available to students in the Un
 	journal = {bioRxiv}
 }
 ```
+
+# Wait! I don't want to do ANY of the above. I just want to directly reproduce everything...
+
+Hey, fair enough. Check out this [zenodo record](https://zenodo.org/records/15555423?token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6IjJjYWNkNTBmLTJhYTYtNGNkNS05Y2RjLWI0YjBmZDE1MGM3OSIsImRhdGEiOnt9LCJyYW5kb20iOiIzN2VkYTIwOTkxYTdhNGU4OGFiMmQ3YTk3M2QwM2FhZiJ9.gThq3cWo3kGaS-eMYcFgmLzJC-kSFO7xqobN99sBqeeDgFOqFZzLZkkZchBtYV_VvgKDIP-bWHUQT7_Np4fGcA).
