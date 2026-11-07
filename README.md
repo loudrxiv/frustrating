@@ -47,3 +47,11 @@ For model training and the like, we used the HPC available to students in the Un
 # Wait! I don't want to do ANY of the above. I just want to directly reproduce everything...
 
 Hey, fair enough. Check out this [zenodo record](https://zenodo.org/records/15555423?token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6IjJjYWNkNTBmLTJhYTYtNGNkNS05Y2RjLWI0YjBmZDE1MGM3OSIsImRhdGEiOnt9LCJyYW5kb20iOiIzN2VkYTIwOTkxYTdhNGU4OGFiMmQ3YTk3M2QwM2FhZiJ9.gThq3cWo3kGaS-eMYcFgmLzJC-kSFO7xqobN99sBqeeDgFOqFZzLZkkZchBtYV_VvgKDIP-bWHUQT7_Np4fGcA).
+
+## License
+
+Copyright (c) 2025 Mark Maher Makram Ebeid-Attalla.
+
+This project is licensed under the [PolyForm Noncommercial License 1.0.0](LICENSE). You are free to use, modify, and share it for any **noncommercial** purpose, including academic research, teaching, and personal projects, and it may be used by universities, public research organizations, nonprofits, and government institutions.
+
+**Commercial use is not permitted.** Use by or on behalf of a for-profit company requires a separate commercial license; please contact the author.
