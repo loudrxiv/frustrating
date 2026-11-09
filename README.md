@@ -6,10 +6,11 @@
 
 The following code pairs with what we report in the work above. We provide an non adversarial approach, under the scope of unsupervised domain-adaptation, to characterize regulatory genomic function (i.e., transcription factor binding).
 
-If you would like to go through the manuscript, it will be available on the following platforms:
+If you would like to go through the manuscript, it is available here:
 - [bioRxiv](https://www.biorxiv.org/content/10.1101/2025.05.21.655414v1)
-- [ICIBM 2025](https://icibm2025.iaibm.org/Schedule_files/ICIBM2025_Program_Book_2025.07.29.pdf)
-- [Journal (Eventually)](https://www.nationalgeographic.com/animals/mammals/facts/domestic-cat)
+- [RECOMB-CG 2026](https://doi.org/10.1007/978-3-032-26891-4_19) (published)
+
+It was also submitted to [ICIBM 2025](https://icibm2025.iaibm.org/Schedule_files/ICIBM2025_Program_Book_2025.07.29.pdf).
 
 We present two case studies in this work: (1): A two-species, and (2): a multi-species implementation. Since we use different frameworks and data for both, I made nested `README`s that are more specific for each. The `README`s will guide you through the data createion, training procedures, and figure-making -- each of these can be found under the respective folders, `multi-species` and `two-species`. You will need python environments to run any of the code; I create a `conda-envs` folder that has yamls you can use to get setup. We use both Tensorflow and PyTorch. See below for details.
 
